@@ -3,7 +3,7 @@
 // ref: https://stackoverflow.com/questions/387707/what-techniques-can-be-used-to-define-a-class-in-javascript-and-what-are-their
 
 function Body(x, y, stage) {
-	console.log ("creating new body.");
+	//console.log ("creating new body.");
 	this.x = mousePos.x;
 	this.y = mousePos.y;
 	this.xv = 0;
@@ -66,3 +66,26 @@ Body.prototype.detach = function() {
 	this.mouseHistory = [];
 	//console.log ("detached. xv=" + this.xv + " yv=" + this.yv);
 }
+
+Body.prototype.attract = function(otherBody) {
+	var distX = this.x - otherBody.x;
+	var distY = this.y - otherBody.y;
+	var sqDist = (distX * distX) + (distY * distY);
+	var dist = Math.sqrt(sqDist);
+	var force = gConst * (this.volume * otherBody.volume)/sqDist;
+	
+	var thisImpulse = force/this.volume;
+	var otherImpulse = force/otherBody.volume;
+	
+	//normalise vector distX/distY
+	distX = distX / dist;
+	distY = distY / dist;
+	
+	this.xv -= distX * thisImpulse;
+	this.yv -= distY * thisImpulse;
+	
+	otherBody.xv += distX * otherImpulse;
+	otherBody.yv += distY * otherImpulse;
+}
+
+

@@ -8,6 +8,8 @@ var building = false;
 var meteor; //body under construction
 var bodyList = [];
 
+var gConst = 1.0;
+
 function init() {
 	//called in nbody.html
 	stage = new createjs.Stage("stagecanvas");
@@ -17,7 +19,6 @@ function init() {
 
 function startUp() {
 	setUp();
-	
 	
 	createjs.Ticker.addEventListener("tick", tick);
 	createjs.Ticker.setFPS(30);
@@ -30,6 +31,7 @@ function tick() {
 	for (var i = 0; i < bodyList.length; i++) {
 		bodyList[i].tick();
 	}
+	gravity();
 	stage.update();
 }
 
@@ -57,4 +59,15 @@ function detach() {
 	meteor.detach();
 	bodyList.push(meteor);
 }
+
+function gravity() {
+	for (var i = 0; i < bodyList.length; i++) {
+		for (var j = 0; j < bodyList.length; j++) {
+			if (j < i) {
+				bodyList[i].attract(bodyList[j]);
+			}
+		}
+	}
+}
+
 
