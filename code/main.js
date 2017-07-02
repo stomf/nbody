@@ -1,9 +1,8 @@
 'use strict';
 
-var canvas;
+var canvas = document.getElementById("stagecanvas");
 var stage;
 var graphics;
-
 
 var building = false;
 var meteor; //body under construction
@@ -40,21 +39,20 @@ function setUp() {
 	stage.addChild(backdrop);
 	
 	stage.on("stagemousedown", function(evt) {
-		//console.log("the canvas was clicked at "+evt.stageX+","+evt.stageY);
+		//console.log("stage was clicked at "+evt.stageX+","+evt.stageY);
 		building = true;
 		meteor = new Body(evt.stageX, evt.stageY, stage);
 	})
 	
 	stage.on("stagemouseup", function(evt) {
-		//console.log("the canvas was unclicked at "+evt.stageX+","+evt.stageY);
+		//console.log("stage was unclicked at "+evt.stageX+","+evt.stageY);
 		if (building) {
 			detach();
-			bodyList.push(meteor);
 		}
 	})
 }
 
 function detach() {
 	building = false;
-	
+	bodyList.push(meteor);
 }

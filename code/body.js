@@ -1,3 +1,4 @@
+'use strict';
 
 function Body(x, y, stage) {
 	this.x = x;
@@ -20,6 +21,9 @@ Body.prototype.tick = function() {
 }
 
 Body.prototype.enlarge = function() {
+	//console.log ("mouse: " + mousePos.x + ", " + mousePos.y);
+	this.x = mousePos.x;
+	this.y = mousePos.y;
 	this.volume += 5;
 	this.redraw();
 }
