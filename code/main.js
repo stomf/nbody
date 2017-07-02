@@ -6,6 +6,7 @@ var graphics;
 
 
 var building = false;
+var meteor; //body under construction
 
 function init() {
 	//called in nbody.html
@@ -34,6 +35,9 @@ function setUp() {
 	
 	stage.on("stagemousedown", function(evt) {
 		console.log("the canvas was clicked at "+evt.stageX+","+evt.stageY);
+		building = true;
+		
+		meteor = new Body(evt.stageX, evt.stageY, stage);
 	})
 	
 	stage.on("stagemouseup", function(evt) {
