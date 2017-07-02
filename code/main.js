@@ -5,7 +5,7 @@ var stage;
 var graphics;
 
 
-var loader;
+var building = false;
 
 function init() {
 	//called in nbody.html
@@ -33,7 +33,12 @@ function setUp() {
 	stage.addChild(backdrop);
 	
 	stage.on("stagemousedown", function(evt) {
-    console.log("the canvas was clicked at "+evt.stageX+","+evt.stageY);
-})
+		console.log("the canvas was clicked at "+evt.stageX+","+evt.stageY);
+	})
+	
+	stage.on("stagemouseup", function(evt) {
+		console.log("the canvas was unclicked at "+evt.stageX+","+evt.stageY);
+	})
+
 }
 
