@@ -2,7 +2,7 @@
 
 var canvas;
 var stage;
-
+var graphics;
 
 
 var loader;
@@ -10,6 +10,7 @@ var loader;
 function init() {
 	//called in nbody.html
 	stage = new createjs.Stage("stagecanvas");
+	graphics = new createjs.Graphics();
 	startUp();
 }
 
@@ -26,5 +27,13 @@ function tick() {
 	stage.update();
 }
 
-
+function setUp() {
+	var backdrop = new createjs.Shape();
+	backdrop.graphics.beginFill("black").rect(0,0,800,600);
+	stage.addChild(backdrop);
+	
+	stage.on("stagemousedown", function(evt) {
+    console.log("the canvas was clicked at "+evt.stageX+","+evt.stageY);
+})
+}
 
