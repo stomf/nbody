@@ -7,6 +7,7 @@ var graphics;
 
 var building = false;
 var meteor; //body under construction
+var bodyList = [];
 
 function init() {
 	//called in nbody.html
@@ -24,7 +25,12 @@ function startUp() {
 }
 
 function tick() {
-	
+	if (building) {
+		meteor.enlarge();
+	}
+	for (var i = 0; i < bodyList.length; i++) {
+		bodyList[i].tick();
+	}
 	stage.update();
 }
 
@@ -34,15 +40,21 @@ function setUp() {
 	stage.addChild(backdrop);
 	
 	stage.on("stagemousedown", function(evt) {
-		console.log("the canvas was clicked at "+evt.stageX+","+evt.stageY);
+		//console.log("the canvas was clicked at "+evt.stageX+","+evt.stageY);
 		building = true;
-		
 		meteor = new Body(evt.stageX, evt.stageY, stage);
 	})
 	
 	stage.on("stagemouseup", function(evt) {
-		console.log("the canvas was unclicked at "+evt.stageX+","+evt.stageY);
+		//console.log("the canvas was unclicked at "+evt.stageX+","+evt.stageY);
+		if (building) {
+			detach();
+			bodyList.push(meteor);
+		}
 	})
-
 }
 
+function detach() {
+	building = false;
+	
+}

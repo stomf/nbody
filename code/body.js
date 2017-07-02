@@ -4,13 +4,13 @@ function Body(x, y, stage) {
 	this.y = y;
 	this.xv = 0;
 	this.yv = 0;
-	this.volume = 1;
+	this.volume = 5;
 	
 	//radius is cube root of volume. Meh, times some constant.
-	radius = Math.pow(this.volume, 1/3);
+	
 	
 	this.clip = new createjs.Shape();
-	this.clip.graphics.beginFill("white").drawCircle(this.x, this.y, radius);
+	this.redraw();
 	stage.addChild(this.clip);
 }
 
@@ -19,3 +19,13 @@ Body.prototype.tick = function() {
 	this.y = this.y + this.yv;
 }
 
+Body.prototype.enlarge = function() {
+	this.volume += 5;
+	this.redraw();
+}
+
+Body.prototype.redraw = function() {
+	var radius = Math.pow(this.volume, 1/3);
+	this.clip.graphics.clear().beginFill("white").drawCircle(this.x, this.y, radius);
+	
+}
