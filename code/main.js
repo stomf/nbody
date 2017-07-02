@@ -54,5 +54,7 @@ function setUp() {
 
 function detach() {
 	building = false;
+	meteor.detach();
 	bodyList.push(meteor);
 }
+
