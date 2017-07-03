@@ -28,8 +28,12 @@ function tick() {
 	if (building) {
 		meteor.enlarge();
 	}
-	for (var i = 0; i < bodyList.length; i++) {
+	for (var i = bodyList.length - 1; i >= 0; i--) {
 		bodyList[i].tick();
+		if (bodyList[i].doomed) {
+			bodyList[i].destroy(stage);
+			bodyList.splice(i, 1);
+		}
 	}
 	gravity();
 	stage.update();

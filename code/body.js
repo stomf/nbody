@@ -9,6 +9,8 @@ function Body(x, y, stage) {
 	this.xv = 0;
 	this.yv = 0;
 	this.volume = 5;
+	this.radius = 1;
+	this.doomed = false;
 	
 	this.mouseHistory = [];
 	this.updateMouseHistory();
@@ -35,10 +37,15 @@ Body.prototype.enlarge = function() {
 	this.redraw();
 }
 
+Body.prototype.destroy = function(stage) {
+	stage.removeChild(this.clip);
+	this.clip = null;
+}
+
 Body.prototype.redraw = function() {
 	//radius is cube root of volume. Meh, times some constant.
-	var radius = Math.pow(this.volume, 1/3);
-	this.clip.graphics.clear().beginFill("white").drawCircle(0, 0, radius);
+	this.radius = Math.pow(this.volume, 1/3);
+	this.clip.graphics.clear().beginFill("white").drawCircle(0, 0, this.radius);
 	this.clip.x = this.x;
 	this.clip.y = this.y;
 }
@@ -73,20 +80,43 @@ Body.prototype.attract = function(otherBody) {
 	var distY = this.y - otherBody.y;
 	var sqDist = (distX * distX) + (distY * distY);
 	var dist = Math.sqrt(sqDist);
-	var force = gConst * (this.volume * otherBody.volume)/sqDist;
-	
-	var thisImpulse = force/this.volume;
-	var otherImpulse = force/otherBody.volume;
-	
-	//normalise vector distX/distY
-	distX = distX / dist;
-	distY = distY / dist;
-	
-	this.xv -= distX * thisImpulse;
-	this.yv -= distY * thisImpulse;
-	
-	otherBody.xv += distX * otherImpulse;
-	otherBody.yv += distY * otherImpulse;
+	if (dist < this.radius + otherBody.radius) {
+		this.collide(otherBody);
+	}
+	else {
+		var force = gConst * (this.volume * otherBody.volume)/sqDist;
+		
+		var thisImpulse = force/this.volume;
+		var otherImpulse = force/otherBody.volume;
+		
+		//normalise vector distX/distY
+		distX = distX / dist;
+		distY = distY / dist;
+		
+		this.xv -= distX * thisImpulse;
+		this.yv -= distY * thisImpulse;
+		
+		otherBody.xv += distX * otherImpulse;
+		otherBody.yv += distY * otherImpulse;
+	}
 }
 
+Body.prototype.collide = function(otherBody) {
+	if (otherBody.volume > thisBody.volume) {
+		//this could be better
+		this.x = otherBody.x;
+		this.y = otherBody.y;
+	}
+	
+	var xForce = this.xv * this.volume + otherBody.xv * otherBody.volume;
+	var yForce = this.yv * this.volume + otherBody.yv * otherBody.volume;
+	
+	this.volume += otherBody.volume;
+	this.xv = xForce / this.volume;
+	this.yv = yForce / this.volume;
+	otherBody.doomed = true;
+	
+	this.redraw();
+
+}
 
