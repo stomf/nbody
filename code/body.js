@@ -19,6 +19,7 @@ function Body(x, y, stage) {
 }
 
 Body.prototype.tick = function() {
+	//console.log (this.xv, this.yv);
 	this.x += this.xv;
 	this.y += this.yv;
 	this.clip.x = this.x;
@@ -52,7 +53,7 @@ Body.prototype.detach = function() {
 	if (this.mouseHistory.length > 2) {
 		var stepsBack = 5;
 		if (this.mouseHistory.length < 5) {
-			stepsBack = mouseHistory.length;
+			stepsBack = this.mouseHistory.length;
 		}
 		var mStart = this.mouseHistory[this.mouseHistory.length - stepsBack];
 		var mEnd = this.mouseHistory[this.mouseHistory.length - 1];
