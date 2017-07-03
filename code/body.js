@@ -26,6 +26,10 @@ Body.prototype.tick = function() {
 	this.y += this.yv;
 	this.clip.x = this.x;
 	this.clip.y = this.y;
+	
+	if (this.x < -800 || this.y < -800 || this.x > 1600 || this.y > 1440) {
+		this.doomed = true;
+	}
 }
 
 Body.prototype.enlarge = function() {
@@ -102,7 +106,7 @@ Body.prototype.attract = function(otherBody) {
 }
 
 Body.prototype.collide = function(otherBody) {
-	if (otherBody.volume > thisBody.volume) {
+	if (otherBody.volume > this.volume) {
 		//this could be better
 		this.x = otherBody.x;
 		this.y = otherBody.y;
